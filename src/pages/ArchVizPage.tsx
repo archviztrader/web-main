@@ -6,7 +6,6 @@ import {
   Play, 
   Star, 
   Search, 
-  Filter,
   Grid,
   List,
   Eye,
@@ -14,7 +13,6 @@ import {
   BookOpen,
   Settings,
   Palette,
-  Layers,
   Monitor
 } from 'lucide-react';
 
@@ -157,6 +155,9 @@ const ArchVizPage: React.FC = () => {
                     src={course.image}
                     alt={course.title}
                     className="w-full h-48 object-cover"
+                    loading="lazy"
+                    width="400"
+                    height="192"
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
                     <Play className="w-12 h-12 text-white" />
@@ -260,6 +261,9 @@ const ArchVizPage: React.FC = () => {
                     src={asset.image}
                     alt={asset.title}
                     className={`object-cover ${viewMode === 'list' ? 'w-full h-32' : 'w-full h-48'}`}
+                    loading="lazy"
+                    width={viewMode === 'list' ? 400 : 400}
+                    height={viewMode === 'list' ? 128 : 192}
                   />
                   <div className="absolute top-4 right-4 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">
                     {asset.type}
@@ -295,13 +299,22 @@ const ArchVizPage: React.FC = () => {
                   </div>
                   
                   <div className="flex gap-2">
-                    <button className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2">
+                    <button
+                      className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
+                      type="button"
+                      aria-label="Add to Cart"
+                      onClick={() => window.location.href = '/marketplace'}
+                    >
                       <ShoppingCart className="w-4 h-4" />
                       <span>Add to Cart</span>
                     </button>
-                    <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors">
+                    <Link
+                      to={`/assets/${asset.id}`}
+                      className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors flex items-center justify-center"
+                      aria-label="View Asset"
+                    >
                       <Eye className="w-4 h-4" />
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>

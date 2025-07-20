@@ -8,20 +8,18 @@ import {
   BarChart3, 
   DollarSign,
   TrendingUp,
-  Eye,
   Edit,
   Trash2,
   Plus,
   Upload,
-  Calendar,
-  Target,
-  Activity,
   AlertTriangle
 } from 'lucide-react';
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
+  // Edit modal state for Settings tab
+  const [editModal, setEditModal] = useState({ open: false, page: '', section: '', value: '' });
 
   if (!user || !user.isAdmin) {
     return (
@@ -655,9 +653,57 @@ const AdminDashboard: React.FC = () => {
                         {pageData.sections.map((section, idx) => (
                           <div key={idx} className="flex items-center justify-between p-2 bg-slate-50 dark:bg-slate-700 rounded">
                             <span className="text-sm text-gray-700 dark:text-gray-300">{section}</span>
-                            <button className="text-blue-600 hover:text-blue-800 text-sm">Edit</button>
+                            <button
+                              className="text-blue-600 hover:text-blue-800 text-sm"
+                              type="button"
+                              onClick={() => setEditModal({ open: true, page: pageData.page, section, value: section })}
+                            >
+                              Edit
+                            </button>
                           </div>
                         ))}
+      {/* Edit Modal for Settings Tab */}
+      {editModal.open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8 w-full max-w-md relative">
+            <button
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+              onClick={() => setEditModal({ open: false, page: '', section: '', value: '' })}
+              aria-label="Close"
+            >
+              ×
+            </button>
+            <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Edit Section</h2>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Section Name</label>
+              <input
+                type="text"
+                className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                value={editModal.value}
+                onChange={e => setEditModal({ ...editModal, value: e.target.value })}
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <button
+                className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700"
+                onClick={() => setEditModal({ open: false, page: '', section: '', value: '' })}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700"
+                onClick={() => {
+                  // Here you would update the section name in your backend or state
+                  alert(`Section name for '${editModal.section}' in '${editModal.page}' updated to: ${editModal.value}`);
+                  setEditModal({ open: false, page: '', section: '', value: '' });
+                }}
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
                       </div>
                     </div>
                   ))}
