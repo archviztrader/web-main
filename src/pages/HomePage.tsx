@@ -3,16 +3,10 @@ import { Link } from 'react-router-dom';
 import { 
   Box, 
   TrendingUp, 
-  Users, 
   Star, 
   Download, 
   ArrowRight,
-  Shield,
-  Globe,
-  Zap,
-  BookOpen,
-  DollarSign,
-  Award
+  BookOpen
 } from 'lucide-react';
 
 const HomePage: React.FC = () => {
