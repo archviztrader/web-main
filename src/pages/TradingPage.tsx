@@ -6,14 +6,11 @@ import {
   Play, 
   Star, 
   BarChart3,
-  DollarSign,
   Target,
   Shield,
   Zap,
   Users,
   BookOpen,
-  ArrowRight,
-  TrendingDown,
   Activity
 } from 'lucide-react';
 

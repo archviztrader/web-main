@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PageEditor, { SectionConfig } from '../components/PageEditor';
 import { useAuth } from '../contexts/AuthContext';
 import { 
   Settings, 
@@ -16,10 +17,99 @@ import {
 } from 'lucide-react';
 
 const AdminDashboard: React.FC = () => {
+
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
-  // Edit modal state for Settings tab
-  const [editModal, setEditModal] = useState({ open: false, page: '', section: '', value: '' });
+
+  // Page content management state
+  const defaultPageSections: Record<string, { id: string; label: string; visible: boolean; content: string }[]> = {
+    Homepage: [
+      { id: 'hero', label: 'Hero Section', visible: true, content: 'Welcome to the homepage!' },
+      { id: 'features', label: 'Features', visible: true, content: 'Feature highlights here.' },
+      { id: 'stats', label: 'Stats', visible: true, content: 'Some impressive stats.' },
+      { id: 'testimonials', label: 'Testimonials', visible: true, content: 'What our users say.' },
+      { id: 'cta', label: 'CTA', visible: true, content: 'Call to action.' },
+    ],
+    ArchViz: [
+      { id: 'hero', label: 'Hero', visible: true, content: 'ArchViz hero content.' },
+      { id: 'featured', label: 'Featured Courses', visible: true, content: 'Featured ArchViz courses.' },
+      { id: 'marketplace', label: 'Marketplace', visible: true, content: 'ArchViz marketplace.' },
+      { id: 'software', label: 'Software', visible: true, content: 'ArchViz software.' },
+    ],
+    Trading: [
+      { id: 'hero', label: 'Hero', visible: true, content: 'Trading hero content.' },
+      { id: 'courses', label: 'Courses', visible: true, content: 'Trading courses.' },
+      { id: 'software', label: 'Software', visible: true, content: 'Trading software.' },
+      { id: 'indicators', label: 'Indicators', visible: true, content: 'Trading indicators.' },
+    ],
+    Marketplace: [
+      { id: 'plans', label: 'Plans', visible: true, content: 'Marketplace plans.' },
+      { id: 'categories', label: 'Categories', visible: true, content: 'Marketplace categories.' },
+      { id: 'featured', label: 'Featured Items', visible: true, content: 'Featured marketplace items.' },
+    ],
+    Courses: [
+      { id: 'featured', label: 'Featured Course', visible: true, content: 'Featured course.' },
+      { id: 'grid', label: 'Course Grid', visible: true, content: 'Course grid.' },
+      { id: 'benefits', label: 'Benefits', visible: true, content: 'Course benefits.' },
+    ],
+    Blog: [
+      { id: 'featured', label: 'Featured Post', visible: true, content: 'Featured blog post.' },
+      { id: 'categories', label: 'Categories', visible: true, content: 'Blog categories.' },
+      { id: 'newsletter', label: 'Newsletter', visible: true, content: 'Newsletter signup.' },
+    ],
+  };
+
+  const [pageSections, setPageSections] = useState(defaultPageSections);
+  const [editorModal, setEditorModal] = useState<{ open: boolean; page: string; sections: SectionConfig[] }>({ open: false, page: '', sections: [] });
+  const [editMode, setEditMode] = useState(false);
+
+  // Open editor for a page
+  const handleOpenEditor = (page: string) => {
+    const sections = pageSections[page].map(s => ({
+      id: s.id,
+      label: s.label,
+      visible: s.visible,
+      content: s.content,
+    }));
+    setEditorModal({ open: true, page, sections });
+    setEditMode(false);
+  };
+
+  // Close editor modal
+  const handleCloseEditor = () => {
+    setEditorModal({ open: false, page: '', sections: [] });
+    setEditMode(false);
+  };
+
+  // Toggle section visibility
+  const handleSectionToggle = (id: string, visible: boolean) => {
+    setEditorModal((prev) => ({
+      ...prev,
+      sections: prev.sections.map(s => s.id === id ? { ...s, visible } : s),
+    }));
+  };
+
+  // Edit section content
+  const handleSectionEdit = (id: string, newContent: string) => {
+    setEditorModal((prev) => ({
+      ...prev,
+      sections: prev.sections.map(s => s.id === id ? { ...s, content: newContent } : s),
+    }));
+  };
+
+  // Save changes to page sections
+  const handleSaveEditor = () => {
+    setPageSections(prev => ({
+      ...prev,
+      [editorModal.page]: editorModal.sections.map(s => ({
+        id: s.id,
+        label: s.label,
+        visible: s.visible,
+        content: typeof s.content === 'string' ? s.content : '',
+      })),
+    }));
+    handleCloseEditor();
+  };
 
   if (!user || !user.isAdmin) {
     return (
@@ -628,86 +718,60 @@ const AdminDashboard: React.FC = () => {
             </div>
           )}
 
+
           {/* Settings Tab */}
           {activeTab === 'settings' && (
             <div className="space-y-6">
-              {/* Page-wise Content Management */}
+              {/* Page Content Management */}
               <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg">
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
                   Page Content Management
                 </h3>
                 <div className="grid md:grid-cols-2 gap-6">
-                  {[
-                    { page: 'Homepage', sections: ['Hero Section', 'Features', 'Stats', 'Testimonials', 'CTA'] },
-                    { page: 'ArchViz', sections: ['Hero', 'Featured Courses', 'Marketplace', 'Software'] },
-                    { page: 'Trading', sections: ['Hero', 'Courses', 'Software', 'Indicators'] },
-                    { page: 'Marketplace', sections: ['Plans', 'Categories', 'Featured Items'] },
-                    { page: 'Courses', sections: ['Featured Course', 'Course Grid', 'Benefits'] },
-                    { page: 'Blog', sections: ['Featured Post', 'Categories', 'Newsletter'] }
-                  ].map((pageData, index) => (
-                    <div key={index} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-                      <h4 className="font-semibold text-gray-900 dark:text-white mb-3">
-                        {pageData.page}
+                  {Object.keys(pageSections).map((page) => (
+                    <div key={page} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                      <h4 className="font-semibold text-gray-900 dark:text-white mb-3 cursor-pointer hover:underline" onClick={() => handleOpenEditor(page)}>
+                        {page}
                       </h4>
-                      <div className="space-y-2">
-                        {pageData.sections.map((section, idx) => (
-                          <div key={idx} className="flex items-center justify-between p-2 bg-slate-50 dark:bg-slate-700 rounded">
-                            <span className="text-sm text-gray-700 dark:text-gray-300">{section}</span>
-                            <button
-                              className="text-blue-600 hover:text-blue-800 text-sm"
-                              type="button"
-                              onClick={() => setEditModal({ open: true, page: pageData.page, section, value: section })}
-                            >
-                              Edit
-                            </button>
-                          </div>
-                        ))}
-      {/* Edit Modal for Settings Tab */}
-      {editModal.open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8 w-full max-w-md relative">
-            <button
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
-              onClick={() => setEditModal({ open: false, page: '', section: '', value: '' })}
-              aria-label="Close"
-            >
-              ×
-            </button>
-            <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Edit Section</h2>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Section Name</label>
-              <input
-                type="text"
-                className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-                value={editModal.value}
-                onChange={e => setEditModal({ ...editModal, value: e.target.value })}
-              />
-            </div>
-            <div className="flex justify-end gap-2">
-              <button
-                className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700"
-                onClick={() => setEditModal({ open: false, page: '', section: '', value: '' })}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700"
-                onClick={() => {
-                  // Here you would update the section name in your backend or state
-                  alert(`Section name for '${editModal.section}' in '${editModal.page}' updated to: ${editModal.value}`);
-                  setEditModal({ open: false, page: '', section: '', value: '' });
-                }}
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-                      </div>
                     </div>
                   ))}
                 </div>
+                {/* Page Editor Modal */}
+                {editorModal.open && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+                    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8 w-full max-w-2xl relative">
+                      <button
+                        className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                        onClick={handleCloseEditor}
+                        aria-label="Close"
+                      >
+                        ×
+                      </button>
+                      <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Edit {editorModal.page} Page</h2>
+                      <PageEditor
+                        sections={editorModal.sections}
+                        onSectionToggle={handleSectionToggle}
+                        onSectionEdit={handleSectionEdit}
+                        editMode={editMode}
+                        setEditMode={setEditMode}
+                      />
+                      <div className="flex justify-end gap-2 mt-4">
+                        <button
+                          className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700"
+                          onClick={handleCloseEditor}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700"
+                          onClick={handleSaveEditor}
+                        >
+                          Save
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* SEO & Meta Management */}
