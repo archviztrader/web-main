@@ -59,9 +59,25 @@ const AdminDashboard: React.FC = () => {
     ],
   };
 
+
   const [pageSections, setPageSections] = useState(defaultPageSections);
   const [editorModal, setEditorModal] = useState<{ open: boolean; page: string; sections: SectionConfig[] }>({ open: false, page: '', sections: [] });
   const [editMode, setEditMode] = useState(false);
+  const [contactNumber, setContactNumber] = useState('');
+  const [socialLinks, setSocialLinks] = useState<{ [key: string]: string }>({ facebook: '', twitter: '', instagram: '', linkedin: '' });
+  const [privacyPolicy, setPrivacyPolicy] = useState('');
+
+  // Load all content from backend on mount
+  React.useEffect(() => {
+    fetch('http://localhost:4000/api/content')
+      .then(res => res.json())
+      .then(data => {
+        setPageSections(data.pageSections || defaultPageSections);
+        setContactNumber(data.contactNumber || '');
+        setSocialLinks(data.socialLinks || { facebook: '', twitter: '', instagram: '', linkedin: '' });
+        setPrivacyPolicy(data.privacyPolicy || '');
+      });
+  }, []);
 
   // Open editor for a page
   const handleOpenEditor = (page: string) => {
@@ -90,25 +106,55 @@ const AdminDashboard: React.FC = () => {
   };
 
   // Edit section content
-  const handleSectionEdit = (id: string, newContent: string) => {
+  const handleSectionEdit = (id: string, newContent: React.ReactNode) => {
     setEditorModal((prev) => ({
       ...prev,
       sections: prev.sections.map(s => s.id === id ? { ...s, content: newContent } : s),
     }));
   };
 
-  // Save changes to page sections
+
+  // Save changes to page sections and sync with backend
   const handleSaveEditor = () => {
-    setPageSections(prev => ({
-      ...prev,
+    const updated = {
+      ...pageSections,
       [editorModal.page]: editorModal.sections.map(s => ({
         id: s.id,
         label: s.label,
         visible: s.visible,
-        content: typeof s.content === 'string' ? s.content : '',
+        content: typeof s.content === 'string' ? s.content : (s.content ? String(s.content) : ''),
       })),
-    }));
+    };
+    setPageSections(updated);
+    fetch('http://localhost:4000/api/pageSections', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updated),
+    });
     handleCloseEditor();
+  };
+
+  // Save contact/social/privacy to backend
+  const handleSaveContact = () => {
+    fetch('http://localhost:4000/api/contactNumber', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contactNumber }),
+    });
+  };
+  const handleSaveSocial = () => {
+    fetch('http://localhost:4000/api/socialLinks', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(socialLinks),
+    });
+  };
+  const handleSavePrivacy = () => {
+    fetch('http://localhost:4000/api/privacyPolicy', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ privacyPolicy }),
+    });
   };
 
   if (!user || !user.isAdmin) {
@@ -774,43 +820,50 @@ const AdminDashboard: React.FC = () => {
                 )}
               </div>
 
-              {/* SEO & Meta Management */}
+
+              {/* Contact Number Management */}
               <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg">
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
-                  SEO & Meta Tags
-                </h3>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Site Title
-                    </label>
-                    <input
-                      type="text"
-                      defaultValue="ArchVizTrader - Architecture Visualization & Trading Education"
-                      className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Meta Description
-                    </label>
-                    <textarea
-                      rows={3}
-                      defaultValue="Learn architecture visualization and trading with professional courses, premium software, and expert guidance."
-                      className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Keywords
-                    </label>
-                    <input
-                      type="text"
-                      defaultValue="architecture visualization, 3D rendering, trading courses, forex, crypto"
-                      className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Contact Number</h3>
+                <div className="flex gap-2 items-center">
+                  <input
+                    type="text"
+                    value={contactNumber}
+                    onChange={e => setContactNumber(e.target.value)}
+                    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                  />
+                  <button className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700" onClick={handleSaveContact}>Save</button>
                 </div>
+              </div>
+
+              {/* Social Media Links Management */}
+              <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Social Media Links</h3>
+                <div className="space-y-2">
+                  {Object.keys(socialLinks).map((platform) => (
+                    <div key={platform} className="flex gap-2 items-center">
+                      <input
+                        type="text"
+                        placeholder={platform.charAt(0).toUpperCase() + platform.slice(1) + ' URL'}
+                        value={socialLinks[platform]}
+                        onChange={e => setSocialLinks((prev: any) => ({ ...prev, [platform]: e.target.value }))}
+                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                  ))}
+                  <button className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 mt-2" onClick={handleSaveSocial}>Save</button>
+                </div>
+              </div>
+
+              {/* Privacy Policy Management */}
+              <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Privacy Policy</h3>
+                <textarea
+                  rows={6}
+                  value={privacyPolicy}
+                  onChange={e => setPrivacyPolicy(e.target.value)}
+                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 mb-2"
+                />
+                <button className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700" onClick={handleSavePrivacy}>Save</button>
               </div>
 
               {/* Ad Management */}

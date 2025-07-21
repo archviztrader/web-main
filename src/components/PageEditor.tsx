@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import RichTextEditor from './RichTextEditor';
 
 export interface SectionConfig {
   id: string;
@@ -74,12 +75,7 @@ const PageEditor: React.FC<PageEditorProps> = ({
             <div>
               {editingSection === section.id ? (
                 <div className="mt-4">
-                  <textarea
-                    className="w-full p-2 border rounded mb-2"
-                    rows={4}
-                    value={editValue}
-                    onChange={e => setEditValue(e.target.value)}
-                  />
+                  <RichTextEditor value={editValue} onChange={setEditValue} />
                   <div className="flex gap-2">
                     <button
                       className="bg-blue-600 text-white px-4 py-1 rounded"
