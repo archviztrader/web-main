@@ -768,10 +768,10 @@ const AdminDashboard: React.FC = () => {
           {/* Settings Tab */}
           {activeTab === 'settings' && (
             <div className="space-y-6">
-              {/* Page Content Management */}
+              {/* Website Page Editor */}
               <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg">
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
-                  Page Content Management
+                  Website Page Editor
                 </h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   {Object.keys(pageSections).map((page) => (
@@ -779,6 +779,12 @@ const AdminDashboard: React.FC = () => {
                       <h4 className="font-semibold text-gray-900 dark:text-white mb-3 cursor-pointer hover:underline" onClick={() => handleOpenEditor(page)}>
                         {page}
                       </h4>
+                      <button
+                        className="mt-2 px-3 py-1 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700"
+                        onClick={() => handleOpenEditor(page)}
+                      >
+                        Edit Page
+                      </button>
                     </div>
                   ))}
                 </div>
@@ -812,7 +818,7 @@ const AdminDashboard: React.FC = () => {
                           className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700"
                           onClick={handleSaveEditor}
                         >
-                          Save
+                          Save Changes
                         </button>
                       </div>
                     </div>
