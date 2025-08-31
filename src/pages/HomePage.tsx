@@ -46,27 +46,6 @@ const HomePage: React.FC = () => {
     { value: "95%", label: "Success Rate" }
   ];
 
-  const testimonials = [
-    {
-      name: "Sarah Johnson",
-      role: "3D Artist",
-      content: "The ArchViz courses transformed my career. Now I'm earning $80k+ annually!",
-      avatar: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150"
-    },
-    {
-      name: "Mike Chen",
-      role: "Day Trader",
-      content: "The trading strategies here are gold. Made my first $10k profit in 3 months.",
-      avatar: "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=150"
-    },
-    {
-      name: "Emma Davis",
-      role: "Architect",
-      content: "Perfect combination of creativity and finance. Building my dream portfolio!",
-      avatar: "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150"
-    }
-  ];
-
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -231,50 +210,6 @@ const HomePage: React.FC = () => {
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-20 bg-slate-50 dark:bg-slate-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              What Our Students Say
-            </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300">
-              Join thousands of successful professionals
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-lg">
-                <div className="flex items-center mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-                <p className="text-gray-600 dark:text-gray-300 mb-6">
-                  "{testimonial.content}"
-                </p>
-                <div className="flex items-center space-x-3">
-                  <img
-                    src={testimonial.avatar}
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                  <div>
-                    <div className="font-semibold text-gray-900 dark:text-white">
-                      {testimonial.name}
-                    </div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                      {testimonial.role}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
