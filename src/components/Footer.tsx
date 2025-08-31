@@ -10,8 +10,8 @@ const Footer: React.FC = () => {
           {/* Company Info */}
           <div className="w-full md:w-1/4 mb-6 md:mb-0">
             <h5 className="text-lg font-semibold mb-4">ArchViz Trader</h5>
-            <p className="text-slate-400 text-sm mb-2">Email: info@archviztrader.com</p>
-            <p className="text-slate-400 text-sm">Phone: +123 456 7890</p>
+            <p className="text-slate-400 text-sm mb-2">Email: arch.viz.trader@gmail.com</p>
+            <p className="text-slate-400 text-sm">Phone: +91 9911-77-3630</p>
           </div>
 
           {/* Quick Links */}

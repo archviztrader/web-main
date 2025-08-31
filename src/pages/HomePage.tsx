@@ -14,6 +14,7 @@ import {
   DollarSign,
   Award
 } from 'lucide-react';
+import homeContent from '../content/pages/home.yaml';
 
 const HomePage: React.FC = () => {
   const features = [
@@ -64,15 +65,11 @@ const HomePage: React.FC = () => {
             </div>
             
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
-              Master
-              <span className="bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent"> 3D Visualization</span>
-              <br />
-              & <span className="bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">Trading</span>
+              {homeContent.hero_heading}
             </h1>
             
             <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Your premier destination for Architecture Visualization and Trading education. 
-              Build stunning 3D renders and profitable trading strategies.
+              {homeContent.hero_subheading}
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
