@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Youtube, Send, Discord, X, Instagram } from 'lucide-react';
+import { Youtube, Send, X, Instagram } from 'lucide-react';
 
 const Footer: React.FC = () => {
   return (
@@ -37,9 +37,6 @@ const Footer: React.FC = () => {
               </a>
               <a href="https://t.me/+ZKdXe3KauzFkYWU1" className="text-slate-400 hover:text-blue-400 transition-colors">
                 <Send className="w-5 h-5" />
-              </a>
-              <a href="https://discord.gg/2njRbBy5" className="text-slate-400 hover:text-indigo-400 transition-colors">
-                <Discord className="w-5 h-5" />
               </a>
               <a href="https://x.com/archviztrader" className="text-slate-400 hover:text-gray-400 transition-colors">
                 <X className="w-5 h-5" />
