@@ -14,7 +14,10 @@ import {
   DollarSign,
   Award
 } from 'lucide-react';
-import homeContent from '../content/pages/home.yaml';
+import yaml from 'js-yaml';
+import homeContentYaml from '../content/pages/home.yaml';
+
+const homeContent = yaml.load(homeContentYaml);
 
 const HomePage: React.FC = () => {
   const features = [

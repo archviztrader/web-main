@@ -12,6 +12,10 @@ import {
   Tag,
   Filter
 } from 'lucide-react';
+import yaml from 'js-yaml';
+import blogContentYaml from '../content/pages/blog.yaml';
+
+const blogContent = yaml.load(blogContentYaml);
 
 const BlogPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -27,7 +31,7 @@ const BlogPage: React.FC = () => {
 
   const featuredPost = {
     id: 1,
-    title: "The Future of Architecture Visualization: AI and Real-Time Rendering",
+    title: blogContent.featured_posts[0].title,
     excerpt: "Explore how artificial intelligence and real-time rendering technologies are revolutionizing the architectural visualization industry.",
     author: "Sarah Johnson",
     date: "2024-01-15",
@@ -121,7 +125,7 @@ const BlogPage: React.FC = () => {
           <div className="text-center">
             <BookOpen className="w-16 h-16 mx-auto mb-6" />
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Blog & Tutorials
+              {blogContent.title}
             </h1>
             <p className="text-xl text-blue-100 max-w-2xl mx-auto">
               Expert insights, tutorials, and industry news for ArchViz and Trading professionals
