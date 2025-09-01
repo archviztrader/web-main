@@ -22,22 +22,22 @@ const homeContent: any = yaml.load(homeContentYaml);
 const HomePage: React.FC = () => {
   const features = [
     {
-      icon: <Box className="w-8 h-8 text-blue-600" />,
+      icon: <Box className="w-8 h-8 text-blue-600 dark:text-blue-400" />,
       title: "3D Asset Marketplace",
       description: "Premium 3D models, textures, and materials for architectural visualization"
     },
     {
-      icon: <TrendingUp className="w-8 h-8 text-emerald-600" />,
+      icon: <TrendingUp className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />,
       title: "Trading Education",
       description: "Comprehensive courses and tools for mastering financial markets"
     },
     {
-      icon: <BookOpen className="w-8 h-8 text-purple-600" />,
+      icon: <BookOpen className="w-8 h-8 text-purple-600 dark:text-purple-400" />,
       title: "Video Courses",
       description: "Step-by-step tutorials with progress tracking and certificates"
     },
     {
-      icon: <Download className="w-8 h-8 text-red-600" />,
+      icon: <Download className="w-8 h-8 text-red-600 dark:text-red-400" />,
       title: "Premium Software",
       description: "Free downloads of trading software and visualization tools"
     }
@@ -51,7 +51,7 @@ const HomePage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white dark:bg-slate-900">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-emerald-600/20 dark:from-blue-900/30 dark:to-emerald-900/30"></div>
@@ -84,7 +84,7 @@ const HomePage: React.FC = () => {
               </Link>
               <Link
                 to="/marketplace"
-                className="border-2 border-blue-600 text-blue-600 dark:text-blue-400 px-8 py-4 rounded-full font-semibold text-lg hover:bg-blue-600 hover:text-white transition-all duration-300"
+                className="border-2 border-blue-600 text-blue-600 dark:text-blue-400 px-8 py-4 rounded-full font-semibold text-lg hover:bg-blue-600 hover:text-white dark:hover:text-white transition-all duration-300"
               >
                 Explore Marketplace
               </Link>
@@ -146,7 +146,7 @@ const HomePage: React.FC = () => {
             {/* Architecture Visualization */}
             <div className="space-y-6">
               <div className="flex items-center space-x-3">
-                <Box className="w-10 h-10 text-blue-600" />
+                <Box className="w-10 h-10 text-blue-600 dark:text-blue-400" />
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
                   Architecture Visualization
                 </h3>
@@ -170,7 +170,7 @@ const HomePage: React.FC = () => {
               </div>
               <Link
                 to="/archviz"
-                className="inline-flex items-center space-x-2 text-blue-600 font-semibold hover:text-blue-700 transition-colors"
+                className="inline-flex items-center space-x-2 text-blue-600 dark:text-blue-400 font-semibold hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
               >
                 <span>Explore ArchViz</span>
                 <ArrowRight className="w-4 h-4" />
@@ -180,7 +180,7 @@ const HomePage: React.FC = () => {
             {/* Trading */}
             <div className="space-y-6">
               <div className="flex items-center space-x-3">
-                <TrendingUp className="w-10 h-10 text-emerald-600" />
+                <TrendingUp className="w-10 h-10 text-emerald-600 dark:text-emerald-400" />
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
                   Trading Education
                 </h3>
@@ -204,7 +204,7 @@ const HomePage: React.FC = () => {
               </div>
               <Link
                 to="/trading"
-                className="inline-flex items-center space-x-2 text-emerald-600 font-semibold hover:text-emerald-700 transition-colors"
+                className="inline-flex items-center space-x-2 text-emerald-600 dark:text-emerald-400 font-semibold hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors"
               >
                 <span>Start Trading</span>
                 <ArrowRight className="w-4 h-4" />
