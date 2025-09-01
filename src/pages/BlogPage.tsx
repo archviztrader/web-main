@@ -13,9 +13,9 @@ import {
   Filter
 } from 'lucide-react';
 import yaml from 'js-yaml';
-import blogContentYaml from '../content/pages/blog.yaml';
+import blogContentYaml from '../content/pages/blog.yaml?raw';
 
-const blogContent = yaml.load(blogContentYaml);
+const blogContent: any = yaml.load(blogContentYaml);
 
 const BlogPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');

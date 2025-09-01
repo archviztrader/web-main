@@ -15,9 +15,9 @@ import {
   Award
 } from 'lucide-react';
 import yaml from 'js-yaml';
-import homeContentYaml from '../content/pages/home.yaml';
+import homeContentYaml from '../content/pages/home.yaml?raw';
 
-const homeContent = yaml.load(homeContentYaml);
+const homeContent: any = yaml.load(homeContentYaml);
 
 const HomePage: React.FC = () => {
   const features = [
